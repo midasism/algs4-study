@@ -1,9 +1,10 @@
 package homework.one.three;
 
 import java.util.EmptyStackException;
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class Stack<Item>{
+public class Stack<Item> implements Iterable<Item>{
     private Node<Item> first;     // top of stack
     private int n;                // size of the stack
 
@@ -47,5 +48,35 @@ public class Stack<Item>{
         //if (isEmpty()) throw new NoSuchElementException("Stack underflow");
         if(isEmpty()) throw new EmptyStackException();
         return first.item;
+    }
+
+    //1.3.12 copy()
+    public static Stack<String> copy(Stack<String> s) {
+        Stack<String> res = new Stack<>();
+        for (String str : s) {
+            res.push(str);
+        }
+        return res;
+    }
+
+    @Override
+    public Iterator iterator() {
+        return new StackIterator();
+    }
+
+    private class StackIterator implements Iterator<Item> {
+        private Stack.Node<Item> cur = first;
+
+        @Override
+        public boolean hasNext() {
+            return cur == null;
+        }
+
+        @Override
+        public Item next() {
+            Item res = cur.item;
+            cur = cur.next;
+            return res;
+        }
     }
 }
